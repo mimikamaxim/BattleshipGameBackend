@@ -1,4 +1,4 @@
-package jcource.battleship.battleship;
+package jcource.battleship;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
