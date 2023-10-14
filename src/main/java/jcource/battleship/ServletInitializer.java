@@ -1,4 +1,4 @@
-package jcource.battleship.battleship;
+package jcource.battleship;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
