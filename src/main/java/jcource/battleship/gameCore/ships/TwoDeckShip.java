@@ -4,12 +4,23 @@ import jcource.battleship.gameCore.Exeptions.IllegalShipPositionException;
 import jcource.battleship.gameCore.GameFieldPoint;
 
 public class TwoDeckShip extends Ship {
-    TwoDeckShip(GameFieldPoint anchor, ShipOrientation orientation) throws IllegalShipPositionException {
+    public TwoDeckShip(GameFieldPoint anchor, ShipOrientation orientation) throws IllegalShipPositionException {
         this.orientation = orientation;
         if (orientation == ShipOrientation.VERTICAL)
-            if (anchor.getY() > 8) throw new IllegalShipPositionException(); else this.anchor = anchor;
-        else
-            if (anchor.getX() > 8) throw new IllegalShipPositionException(); else this.anchor = anchor;
+            if (anchor.getY() > 8)
+                throw new IllegalShipPositionException("The ship leaves the boundary field along the Y axis");
+            else this.anchor = anchor;
+        else if (anchor.getX() > 8)
+            throw new IllegalShipPositionException("The ship leaves the boundary field along the X axis");
+        else this.anchor = anchor;
+        if (orientation == ShipOrientation.VERTICAL) {
+            this.shipCells.add(anchor);
+            this.shipCells.add(new GameFieldPoint(anchor.getX(), anchor.getY() + 1));
+        } else {
+            this.shipCells.add(anchor);
+            this.shipCells.add(new GameFieldPoint(anchor.getX() + 1, anchor.getY()));
+        }
+        setNeighbours();
     }
 
     @Override

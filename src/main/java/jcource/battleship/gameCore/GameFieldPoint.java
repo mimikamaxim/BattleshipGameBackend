@@ -4,15 +4,17 @@ import jcource.battleship.gameCore.Exeptions.OutOfBoundsPointArgumentException;
 
 import java.util.Objects;
 
-public class GameFieldPoint {
+public class GameFieldPoint implements Comparable<GameFieldPoint> {
+    private static final byte SIZE_UP = 10;
+    private static final byte SIZE_BOTTOM = 1;
     private final int x;
     private final int y;
 
-    GameFieldPoint(int x, int y) throws OutOfBoundsPointArgumentException {
-        if (x > 0 && x < 11) this.x = x;
-        else throw new OutOfBoundsPointArgumentException();
-        if (y > 0 && y < 11) this.y = y;
-        else throw new OutOfBoundsPointArgumentException();
+    public GameFieldPoint(int x, int y) throws OutOfBoundsPointArgumentException {
+        if (x >= SIZE_BOTTOM && x <= SIZE_UP) this.x = x;
+        else throw new OutOfBoundsPointArgumentException("Arguments must be [" + SIZE_BOTTOM + ";" + SIZE_UP + "]");
+        if (y >= SIZE_BOTTOM && y <= SIZE_UP) this.y = y;
+        else throw new OutOfBoundsPointArgumentException("Arguments must be [" + SIZE_BOTTOM + ";" + SIZE_UP + "]");
     }
 
     public int getX() {
@@ -41,5 +43,10 @@ public class GameFieldPoint {
                 "x=" + x +
                 ", y=" + y +
                 '}';
+    }
+
+    @Override
+    public int compareTo(GameFieldPoint o) {
+        return equals(o) ? 0 : 1;
     }
 }

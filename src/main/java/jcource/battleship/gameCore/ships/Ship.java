@@ -1,12 +1,32 @@
 package jcource.battleship.gameCore.ships;
 
+import jcource.battleship.gameCore.Exeptions.OutOfBoundsPointArgumentException;
 import jcource.battleship.gameCore.GameFieldPoint;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.TreeSet;
 
-abstract class Ship {
+public abstract class Ship {
     protected GameFieldPoint anchor;
     protected ShipOrientation orientation;
+    protected TreeSet<GameFieldPoint> lockedCells = new TreeSet<>();
+    protected ArrayList<GameFieldPoint> shipCells = new ArrayList<>();
+
+    protected void setNeighbours() {
+        for (GameFieldPoint shipCell : shipCells) {
+            int x = shipCell.getX();
+            int y = shipCell.getY();
+            for (int i = y - 1; i <= y + 1; i++)
+                for (int j = x - 1; j <= x + 1; j++)
+                    try {
+                        GameFieldPoint neighbour = new GameFieldPoint(j, i);
+                        lockedCells.add(neighbour);
+                    } catch (OutOfBoundsPointArgumentException ignored) {
+                    }
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -34,5 +54,13 @@ abstract class Ship {
 
     public ShipOrientation getOrientation() {
         return orientation;
+    }
+
+    public TreeSet<GameFieldPoint> getLockedCells() {
+        return lockedCells;
+    }
+
+    public List<GameFieldPoint> getShipCells() {
+        return shipCells;
     }
 }
