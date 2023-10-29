@@ -4,7 +4,7 @@ import jcource.battleship.gameCore.Exeptions.IllegalShipPositionException;
 import jcource.battleship.gameCore.GameFieldPoint;
 
 public class FourDeckShip extends Ship {
-    FourDeckShip(GameFieldPoint anchor, ShipOrientation orientation) throws IllegalShipPositionException {
+    public FourDeckShip(GameFieldPoint anchor, ShipOrientation orientation) throws IllegalShipPositionException {
         this.orientation = orientation;
         if (orientation == ShipOrientation.VERTICAL)
             if (anchor.getX() > 7)

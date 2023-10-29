@@ -3,15 +3,12 @@ package jcource.battleship.gameCore.ships;
 import jcource.battleship.gameCore.Exeptions.OutOfBoundsPointArgumentException;
 import jcource.battleship.gameCore.GameFieldPoint;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.TreeSet;
+import java.util.*;
 
 public abstract class Ship {
     protected GameFieldPoint anchor;
     protected ShipOrientation orientation;
-    protected TreeSet<GameFieldPoint> lockedCells = new TreeSet<>();
+    protected LinkedHashSet<GameFieldPoint> lockedCells = new LinkedHashSet<>();
     protected ArrayList<GameFieldPoint> shipCells = new ArrayList<>();
 
     protected void setNeighbours() {
@@ -56,7 +53,7 @@ public abstract class Ship {
         return orientation;
     }
 
-    public TreeSet<GameFieldPoint> getLockedCells() {
+    public LinkedHashSet<GameFieldPoint> getLockedCells() {
         return lockedCells;
     }
 
