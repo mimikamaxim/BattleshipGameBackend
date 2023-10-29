@@ -25,8 +25,7 @@ public class PlayerGameField {
     final ArrayList<GameFieldPoint> enemyHitShots = new ArrayList<>();
 
     /**
-     * Checks enemy shot and adds the shot to Player list.
-     *
+     * Checks enemy shot and adds the shot to relevant <code>PlayerGameField</code> list.
      * @param target it's enemy shot.
      * @return <code>true</code> if enemy shot is hit a player ship.
      * <code>false</code> if the shot is miss.

@@ -45,17 +45,43 @@ public class GameObject {
     }
 
     public enum GameState {
-        USERS_NOT_READY, USER1_NOT_READY, USER2_NOT_READY, USERS_READY, GAME_STARTED
+        USERS_NOT_READY, USER1_NOT_READY, USER2_NOT_READY, USERS_READY, GAME_STARTED;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case USERS_NOT_READY -> {
+                    return "users not ready";
+                }
+                case USER1_NOT_READY -> {
+                    return "user1 not ready;";
+                }
+                case USER2_NOT_READY -> {
+                    return "user2 not ready";
+                }
+                case USERS_READY -> {
+                    return "users ready";
+                }
+                case GAME_STARTED -> {
+                    return "game started";
+                }
+            }
+            return null;
+        }
     }
 
     public boolean userShot(int x, int y, IUser user) throws IllegalArgumentException, IllegalStateException {
         if (gameState == GameState.GAME_STARTED) {
             GameFieldPoint shot = new GameFieldPoint(x, y);
-            return getEnemyUserFields(user).playerGameField.enemyHit(shot);
+            boolean result = getEnemyUserFields(user).playerGameField.enemyHit(shot);
+            if (result) getThisUserFields(user).enemyGameField.addHitShot(shot);
+            else getThisUserFields(user).enemyGameField.addMissShot(shot);
+            return result;
         } else throw new IllegalStateException("Game is not started");
     }
 
-    public UserInitState setShip(int x, int y, boolean isHorizontal, int capacity, IUser user) throws IllegalShipPositionException {
+    public void setShip(int x, int y, boolean isHorizontal, int capacity, IUser user)
+            throws IllegalShipPositionException {
         ShipOrientation shipOrientation;
         GameFieldPoint shipAnchor = new GameFieldPoint(x, y);
         ShipContainerBuilder userShipBuilder = getThisUserFields(user).playerGameField.getShipContainerBuilder();
@@ -80,7 +106,6 @@ public class GameObject {
             }
             default -> throw new IllegalArgumentException("Capacity is incorrect");
         }
-        return userInitState;
     }
 
     private UserFields getThisUserFields(IUser user) {
@@ -95,11 +120,35 @@ public class GameObject {
         throw new IllegalArgumentException("There is no such user in this game instance");
     }
 
-    public EnemyGameField getEnemyGameField(IUser user) {
-        return getThisUserFields(user).enemyGameField;
+//    public EnemyGameField getEnemyGameField(IUser user) {
+//        return getThisUserFields(user).enemyGameField;
+//    }
+//
+//    public PlayerGameField getPlayerGameField(IUser user) {
+//        return getThisUserFields(user).playerGameField;
+//    }
+
+    public void userReady(IUser user) {
+        UserFields userFields = getThisUserFields(user);
+        if (user == user1Fields.user)
+            if (gameState == GameState.USER1_NOT_READY) {
+                gameState = GameState.USERS_READY;
+                startGame();
+            } else gameState = GameState.USER2_NOT_READY;
+        else if (user == user2Fields.user)
+            if (gameState == GameState.USER2_NOT_READY) {
+                gameState = GameState.USERS_READY;
+                startGame();
+            } else gameState = GameState.USER1_NOT_READY;
     }
 
-    public PlayerGameField getPlayerGameField(IUser user) {
-        return getThisUserFields(user).playerGameField;
+    private void startGame() {
+        if (gameState == GameState.USERS_READY) {
+            user1Fields.playerGameField.startGame();
+            user2Fields.playerGameField.startGame();
+            gameState = GameState.GAME_STARTED;
+            return;
+        }
+        throw new IllegalStateException("Can't run game, because " + gameState.toString());
     }
 }
