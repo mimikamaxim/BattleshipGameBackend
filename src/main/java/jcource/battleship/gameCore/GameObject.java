@@ -4,11 +4,10 @@ import jcource.battleship.gameCore.Exeptions.IllegalShipPositionException;
 import jcource.battleship.gameCore.ships.*;
 
 public class GameObject {
-    UserFields user1Fields;
-    UserFields user2Fields;
-    UserInitState userInitState;
-
-    GameState gameState = GameState.USERS_NOT_READY;
+    private UserFields user1Fields;
+    private UserFields user2Fields;
+    private UserInitState userInitState;
+    private GameState gameState = GameState.USERS_NOT_READY;
 
     public GameObject() {
         userInitState = UserInitState.USERS_NOT_SET;
@@ -45,7 +44,7 @@ public class GameObject {
     }
 
     public enum GameState {
-        USERS_NOT_READY, USER1_NOT_READY, USER2_NOT_READY, USERS_READY, GAME_STARTED;
+        USERS_NOT_READY, USER1_NOT_READY, USER2_NOT_READY, USERS_READY, GAME_STARTED, GAME_COMPLETE;
 
         @Override
         public String toString() {
@@ -65,11 +64,14 @@ public class GameObject {
                 case GAME_STARTED -> {
                     return "game started";
                 }
+                case GAME_COMPLETE -> {
+                    return "game complete";
+                }
             }
             return null;
         }
     }
-
+    //TODO имплеменить механику окончания игры
     public boolean userShot(int x, int y, IUser user) throws IllegalArgumentException, IllegalStateException {
         if (gameState == GameState.GAME_STARTED) {
             GameFieldPoint shot = new GameFieldPoint(x, y);
@@ -77,7 +79,7 @@ public class GameObject {
             if (result) getThisUserFields(user).enemyGameField.addHitShot(shot);
             else getThisUserFields(user).enemyGameField.addMissShot(shot);
             return result;
-        } else throw new IllegalStateException("Game is not started");
+        } else throw new IllegalStateException(gameState.toString());
     }
 
     public void setShip(int x, int y, boolean isHorizontal, int capacity, IUser user)
