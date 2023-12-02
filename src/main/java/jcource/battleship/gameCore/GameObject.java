@@ -3,11 +3,13 @@ package jcource.battleship.gameCore;
 import jcource.battleship.gameCore.Exeptions.IllegalShipPositionException;
 import jcource.battleship.gameCore.ships.*;
 import jcource.battleship.gameCore.GameObjectEnums.*;
+import lombok.Getter;
 
 public class GameObject {
-    UserFields user1Fields;
-    UserFields user2Fields;
-    GameState gameState = GameState.USERS_UNDEFINED;
+    private UserFields user1Fields;
+    private UserFields user2Fields;
+    @Getter
+    private GameState gameState = GameState.USERS_UNDEFINED;
 
     public GameObject() {
         gameState = GameState.USERS_UNDEFINED;
@@ -50,7 +52,7 @@ public class GameObject {
             if (result != ShotResult.MISS) getThisUserFields(user).enemyGameField.addHitShot(shot);
             else getThisUserFields(user).enemyGameField.addMissShot(shot);
             return result;
-        } else throw new IllegalStateException("Game is not started");
+        } else throw new IllegalStateException(gameState.toString());
     }
 
     public void setShip(int x, int y, boolean isHorizontal, int capacity, IUser user) throws IllegalShipPositionException {
