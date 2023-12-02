@@ -13,10 +13,10 @@ public class PG {
 //        TwoDeckShip test1 = new TwoDeckShip(gameFieldPoint,ShipOrientation.VERTICAL);
 //        System.out.println(test1.getLockedCells());
 //        System.out.println(test1.getShipCells());
-        ShipContainer shipContainer = new ShipContainer();
-        System.out.println(Arrays.toString(shipContainer.getShipsArray()));
-        shipContainer.addOneDeckShip(new OneDeckShip(gameFieldPoint));
-        System.out.println(Arrays.toString(shipContainer.getShipsArray()));
-        System.out.println(shipContainer.isComplete());
+//        ShipContainer shipContainer = new ShipContainer();
+//        System.out.println(Arrays.toString(shipContainer.getShipsArray()));
+//        shipContainer.addOneDeckShip(new OneDeckShip(gameFieldPoint));
+//        System.out.println(Arrays.toString(shipContainer.getShipsArray()));
+//        System.out.println(shipContainer.isComplete());
     }
 }

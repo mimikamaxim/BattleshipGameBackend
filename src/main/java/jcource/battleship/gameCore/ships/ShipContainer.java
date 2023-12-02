@@ -71,7 +71,7 @@ public class ShipContainer {
         else throw new IllegalStateException("Four-deck ship is already set");
     }
 
-    public Ship[] getShipsArray() {
+    private Ship[] getShipsArray() {
         return new Ship[]{
                 oneDeckShip[0],
                 oneDeckShip[1],
@@ -86,7 +86,7 @@ public class ShipContainer {
         };
     }
 
-    public boolean isComplete() {
+    boolean isComplete() {
         for (Ship ship : getShipsArray()) {
             if (ship == null) return false;
         }
@@ -114,7 +114,7 @@ public class ShipContainer {
         return result;
     }
 
-    private ArrayList<GameFieldPoint> getShipsCells() {
+    public ArrayList<GameFieldPoint> getShipsCells() {
         ArrayList<GameFieldPoint> result = new ArrayList<>();
         for (Ship ship : getShipsArray()) {
             result.addAll(ship.shipCells);
@@ -122,9 +122,9 @@ public class ShipContainer {
         return result;
     }
 
-    public boolean isHitEnemyShot (GameFieldPoint target) {
-        for (GameFieldPoint shipCells : getShipsCells())
-            if (shipCells==target) return true;
-        return false;
-    }
+//    public boolean isHitEnemyShot (GameFieldPoint target) {
+//        for (GameFieldPoint shipCells : getShipsCells())
+//            if (shipCells==target) return true;
+//        return false;
+//    }
 }
