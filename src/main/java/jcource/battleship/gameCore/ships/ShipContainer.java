@@ -32,7 +32,7 @@ public class ShipContainer {
         if (counterOneDeckShip < 4) {
             this.oneDeckShip[counterOneDeckShip++] = oneDeckShip;
         } else throw new IllegalStateException("All one-deck ships is already set");
-        return 4-counterOneDeckShip;
+        return 4 - counterOneDeckShip;
     }
 
     /**
@@ -46,11 +46,10 @@ public class ShipContainer {
         if (counterTwoDeckShip < 3) {
             this.twoDeckShip[counterTwoDeckShip++] = twoDeckShip;
         } else throw new IllegalStateException("All two-deck ships is already set");
-        return 3-counterTwoDeckShip;
+        return 3 - counterTwoDeckShip;
     }
 
     /**
-     *
      * @param threeDeckShip
      * @return number of remaining unidentified ships of this type
      * @throws IllegalStateException - if ship touch another ship or if all ships this type already set
@@ -61,13 +60,13 @@ public class ShipContainer {
         if (counterThreeDeckShip < 2) {
             this.threeDeckShips[counterThreeDeckShip++] = threeDeckShip;
         } else throw new IllegalStateException("All three-deck ships is already set");
-        return 2-counterThreeDeckShip;
+        return 2 - counterThreeDeckShip;
     }
 
     public void addFourDeckShip(FourDeckShip fourDeckShip) throws IllegalStateException {
         if (isUnavailablePosition(fourDeckShip))
             throw new IllegalStateException("The ship touches another ship safe area");
-        if (this.fourDeckShip != null) this.fourDeckShip = fourDeckShip;
+        if (this.fourDeckShip == null) this.fourDeckShip = fourDeckShip;
         else throw new IllegalStateException("Four-deck ship is already set");
     }
 
@@ -86,7 +85,7 @@ public class ShipContainer {
         };
     }
 
-    boolean isComplete() {
+    public boolean isComplete() {
         for (Ship ship : getShipsArray()) {
             if (ship == null) return false;
         }
@@ -117,7 +116,9 @@ public class ShipContainer {
     public ArrayList<GameFieldPoint> getShipsCells() {
         ArrayList<GameFieldPoint> result = new ArrayList<>();
         for (Ship ship : getShipsArray()) {
-            result.addAll(ship.shipCells);
+            if (ship != null) {
+                result.addAll(ship.shipCells);
+            }
         }
         return result;
     }

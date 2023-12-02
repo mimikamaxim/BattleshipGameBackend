@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 public class EnemyGameField {
     @Getter
-    public ArrayList<GameFieldPoint> missedShots = new ArrayList<>();
+    private final ArrayList<GameFieldPoint> missedShots = new ArrayList<>();
     @Getter
-    public ArrayList<GameFieldPoint> hitShots = new ArrayList<>();
+    private final ArrayList<GameFieldPoint> hitShots = new ArrayList<>();
 
     public void addMissShot(GameFieldPoint shot) {
         missedShots.add(shot);
