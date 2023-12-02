@@ -58,21 +58,21 @@ public class GameObject {
     public void setShip(int x, int y, boolean isHorizontal, int capacity, IUser user) throws IllegalShipPositionException {
         ShipOrientation shipOrientation;
         GameFieldPoint shipAnchor = new GameFieldPoint(x, y);
-        ShipContainerBuilder userShipBuilder = getThisUserFields(user).playerGameField.getShipContainerBuilder();
+        ShipContainer shipContainer = getThisUserFields(user).playerGameField.getShipContainer();
         if (isHorizontal) shipOrientation = ShipOrientation.HORIZONTAL;
         else shipOrientation = ShipOrientation.VERTICAL;
         switch (capacity) {
             case 1 -> {
-                userShipBuilder.addOneDeckShip(new OneDeckShip(shipAnchor));
+                shipContainer.addOneDeckShip(new OneDeckShip(shipAnchor));
             }
             case 2 -> {
-                userShipBuilder.addTwoDeckShip(new TwoDeckShip(shipAnchor, shipOrientation));
+                shipContainer.addTwoDeckShip(new TwoDeckShip(shipAnchor, shipOrientation));
             }
             case 3 -> {
-                userShipBuilder.addThreeDeckShip(new ThreeDeckShip(shipAnchor, shipOrientation));
+                shipContainer.addThreeDeckShip(new ThreeDeckShip(shipAnchor, shipOrientation));
             }
             case 4 -> {
-                userShipBuilder.addFourDeckShip(new FourDeckShip(shipAnchor, shipOrientation));
+                shipContainer.addFourDeckShip(new FourDeckShip(shipAnchor, shipOrientation));
             }
             default -> throw new IllegalArgumentException("Capacity is incorrect");
         }

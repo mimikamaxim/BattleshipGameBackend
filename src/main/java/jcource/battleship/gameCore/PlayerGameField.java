@@ -9,13 +9,14 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiConsumer;
 
 public class PlayerGameField {
     public PlayerGameField() {
     }
 
     @Getter
-    private ShipContainer shipContainer;
+    private final ShipContainer shipContainer = new ShipContainer();
     @Getter
     private PlayerFieldState playerFieldState = PlayerFieldState.INIT_STAGE;
 
@@ -24,9 +25,8 @@ public class PlayerGameField {
      */
     private final HashMap<GameFieldPoint, Boolean> shipHitCells = new HashMap<>();
 
-    private ShipContainerBuilder shipContainerBuilder = new ShipContainerBuilder();
-    final ArrayList<GameFieldPoint> enemyMissShots = new ArrayList<>();
-    final ArrayList<GameFieldPoint> enemyHitShots = new ArrayList<>();
+    @Getter
+    private final ArrayList<GameFieldPoint> enemyMissShots = new ArrayList<>();
 
     /**
      * Checks enemy shot and adds the shot to relevant <code>PlayerGameField</code> list.
@@ -50,6 +50,18 @@ public class PlayerGameField {
         else throw new IllegalStateException("Player game field is not accomplished");
     }
 
+    public ArrayList<GameFieldPoint> getShipsPoints() {
+        return shipContainer.getShipsCells();
+    }
+
+    public ArrayList<GameFieldPoint> getEnemyHitShots() {
+        ArrayList<GameFieldPoint> res = new ArrayList<>();
+        shipHitCells.forEach((gameFieldPoint, aBoolean) -> {
+            if (aBoolean) res.add(gameFieldPoint);
+        });
+        return res;
+    }
+
     private boolean checkItsLose() {
         AtomicBoolean res = new AtomicBoolean(true);
         shipHitCells.values().forEach(it -> {
@@ -67,21 +79,23 @@ public class PlayerGameField {
      * @throws NullPointerException  - if you trying start game twice or more
      */
     public void startGame() throws IllegalStateException, NullPointerException {
-        shipContainer = shipContainerBuilder.build();
-        shipContainer.getShipsCells().forEach(it -> shipHitCells.put(it, false));
-        playerFieldState = PlayerFieldState.READY_FOR_GAME;
-        shipContainerBuilder = null;
+        if (shipContainer.isComplete()){
+            shipContainer.getShipsCells().forEach(it -> shipHitCells.put(it, false));
+            playerFieldState = PlayerFieldState.READY_FOR_GAME;
+        } else {
+            throw new IllegalStateException("Not all ships were defined");
+        }
     }
 
-    /**
-     * Use this method for get <code>ShipContainerBuilder</code> and set ships with it.
-     *
-     * @return ShipContainerBuilder
-     * @throws IllegalStateException - if game is started and no way to change player field
-     */
-    public ShipContainerBuilder getShipContainerBuilder() throws IllegalStateException {
-        if (playerFieldState == PlayerFieldState.READY_FOR_GAME)
-            throw new IllegalStateException("Init complete, the builder is unavailable");
-        else return this.shipContainerBuilder;
-    }
+//    /**
+//     * Use this method for get <code>ShipContainerBuilder</code> and set ships with it.
+//     *
+//     * @return ShipContainerBuilder
+//     * @throws IllegalStateException - if game is started and no way to change player field
+//     */
+//    public ShipContainerBuilder getShipContainerBuilder() throws IllegalStateException {
+//        if (playerFieldState == PlayerFieldState.READY_FOR_GAME)
+//            throw new IllegalStateException("Init complete, the builder is unavailable");
+//        else return this.shipContainerBuilder;
+//    }
 }
