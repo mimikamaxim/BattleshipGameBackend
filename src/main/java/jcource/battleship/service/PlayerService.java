@@ -42,9 +42,6 @@ public class PlayerService {
         return playerRepository.findByUsername(username);
     }
 
-    public Optional<Player> getPlayerByEmail(String email){
-        return playerRepository.findByEmail(email);
-    }
 
     @Transactional
     public void delete(int id){

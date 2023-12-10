@@ -1,5 +1,6 @@
 package jcource.battleship.gameCore;
 
+import jakarta.persistence.*;
 import jcource.battleship.gameCore.GameObjectEnums.PlayerFieldState;
 import jcource.battleship.gameCore.GameObjectEnums.ShotResult;
 import jcource.battleship.gameCore.ships.ShipContainer;
@@ -10,11 +11,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
-
+@Entity
 public class PlayerGameField {
+    @Id
+    private int id;
     public PlayerGameField() {
     }
 
+    @OneToOne
     @Getter
     private final ShipContainer shipContainer = new ShipContainer();
     @Getter
@@ -23,8 +27,10 @@ public class PlayerGameField {
     /**
      * set true if its hit false if its alive
      */
-    private final HashMap<GameFieldPoint, Boolean> shipHitCells = new HashMap<>();
+    @OneToOne
+    private FieldPointBoolean shipHitCells;
 
+    @OneToMany
     @Getter
     private final ArrayList<GameFieldPoint> enemyMissShots = new ArrayList<>();
 

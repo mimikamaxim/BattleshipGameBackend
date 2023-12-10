@@ -1,9 +1,16 @@
 package jcource.battleship.gameCore.ships;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jcource.battleship.gameCore.Exeptions.IllegalShipPositionException;
 import jcource.battleship.gameCore.GameFieldPoint;
+import lombok.NoArgsConstructor;
 
+@Entity
+@NoArgsConstructor
 public class TwoDeckShip extends Ship {
+    @Id
+    private int id;
     public TwoDeckShip(GameFieldPoint anchor, ShipOrientation orientation) throws IllegalShipPositionException {
         this.orientation = orientation;
         if (orientation == ShipOrientation.VERTICAL)

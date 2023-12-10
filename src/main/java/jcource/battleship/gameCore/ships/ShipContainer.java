@@ -1,14 +1,22 @@
 package jcource.battleship.gameCore.ships;
 
+import jakarta.persistence.*;
 import jcource.battleship.gameCore.GameFieldPoint;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
-
+@Entity
 public class ShipContainer {
+
+    @Id
+    private int id;
+    @OneToOne
     OneDeckShip[] oneDeckShip = new OneDeckShip[4];
+    @OneToOne
     TwoDeckShip[] twoDeckShip = new TwoDeckShip[3];
+    @OneToOne
     ThreeDeckShip[] threeDeckShips = new ThreeDeckShip[2];
+    @OneToOne
     FourDeckShip fourDeckShip;
 
     //TODO add logic reset ships if it will req

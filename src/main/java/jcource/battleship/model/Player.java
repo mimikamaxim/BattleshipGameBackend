@@ -1,15 +1,15 @@
 package jcource.battleship.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jcource.battleship.gameCore.IUser;
 import lombok.*;
 
 @Data
 @Entity
 @Table(name = "Player")
-public class Player {
+public class Player implements IUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +22,14 @@ public class Player {
     private String username;
 
     @NotNull
-    @Size(min = 2, max = 100)
-    @Column(name = "email")
-    @Email
-    private String email;
-
-    @NotNull
     @Column(name = "password")
     private String password;
 
+    @ManyToOne
+    @JoinColumn(name = "player_id", referencedColumnName = "id")
+    private Game game;
+
+    //поле кароблей
+
+    //поле выстрелов
 }

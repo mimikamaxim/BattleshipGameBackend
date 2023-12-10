@@ -1,12 +1,26 @@
 package jcource.battleship.gameCore;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jcource.battleship.gameCore.Exeptions.IllegalShipPositionException;
 import jcource.battleship.gameCore.ships.*;
 import jcource.battleship.gameCore.GameObjectEnums.*;
+import jcource.battleship.model.Player;
+import lombok.Data;
 import lombok.Getter;
-
+@Entity
+@Data
 public class GameObject {
+    //id
+    //user 1
+    //user 2
+    //GAME STATE
+    @Id
+    private int id;
+    @OneToOne
     private UserFields user1Fields;
+    @OneToOne
     private UserFields user2Fields;
     @Getter
     private GameState gameState = GameState.USERS_UNDEFINED;
@@ -15,12 +29,12 @@ public class GameObject {
         gameState = GameState.USERS_UNDEFINED;
     }
 
-    public GameObject(IUser user) {
+    public GameObject(Player user) {
         user1Fields = new UserFields(user);
         gameState = GameState.USER2_UNDEFINED;
     }
 
-    public GameObject(IUser user1, IUser user2) {
+    public GameObject(Player user1, Player user2) {
         user1Fields = new UserFields(user1);
         user2Fields = new UserFields(user2);
         gameState = GameState.USERS_DEFINED;
@@ -33,7 +47,7 @@ public class GameObject {
      * @return - Состояние экземлпяра объекта
      * @throws IllegalStateException - если пользователи уже определены
      */
-    public GameState addUser(IUser user) throws IllegalStateException {
+    public GameState addUser(Player user) throws IllegalStateException {
         if (user1Fields == null) {
             user1Fields = new UserFields(user);
             return gameState = GameState.USER2_UNDEFINED;

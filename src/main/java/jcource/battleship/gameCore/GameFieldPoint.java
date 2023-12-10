@@ -1,14 +1,24 @@
 package jcource.battleship.gameCore;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jcource.battleship.gameCore.Exeptions.OutOfBoundsPointArgumentException;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
-
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class GameFieldPoint implements Comparable<GameFieldPoint> {
+    @Id
+    private int id;
     private static final byte SIZE_UP = 10;
     private static final byte SIZE_BOTTOM = 1;
-    private final int x;
-    private final int y;
+    private int x = 0;
+    private int y = 0;
 
     public GameFieldPoint(int x, int y) throws OutOfBoundsPointArgumentException {
         if (x >= SIZE_BOTTOM && x <= SIZE_UP) this.x = x;

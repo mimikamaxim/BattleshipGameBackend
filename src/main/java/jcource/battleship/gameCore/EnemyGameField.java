@@ -1,12 +1,19 @@
 package jcource.battleship.gameCore;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 
 import java.util.ArrayList;
-
+@Entity
 public class EnemyGameField {
+    @Id
+    private int id;
+    @OneToMany
     @Getter
     private final ArrayList<GameFieldPoint> missedShots = new ArrayList<>();
+    @OneToMany
     @Getter
     private final ArrayList<GameFieldPoint> hitShots = new ArrayList<>();
 
