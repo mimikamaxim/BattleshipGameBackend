@@ -24,4 +24,12 @@ public class EnemyGameField {
     public void addHitShot(GameFieldPoint shot) {
         hitShots.add(shot);
     }
+
+    public ArrayList<GameFieldPoint> getHitShots() {
+        return hitShots;
+    }
+
+    public ArrayList<GameFieldPoint> getMissedShots() {
+        return missedShots;
+    }
 }

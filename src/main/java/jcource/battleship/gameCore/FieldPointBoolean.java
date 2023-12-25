@@ -13,5 +13,11 @@ public class FieldPointBoolean {
     @OneToOne
     GameFieldPoint gameFieldPoint;
 
+    @OneToOne
     boolean bool;
+
+    public FieldPointBoolean(GameFieldPoint it, boolean b) {
+        gameFieldPoint = it;
+        bool = b;
+    }
 }

@@ -4,34 +4,36 @@ import jakarta.persistence.*;
 import jcource.battleship.gameCore.GameObjectEnums.PlayerFieldState;
 import jcource.battleship.gameCore.GameObjectEnums.ShotResult;
 import jcource.battleship.gameCore.ships.ShipContainer;
-import jcource.battleship.gameCore.ships.ShipContainerBuilder;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.BiConsumer;
+
 @Entity
 public class PlayerGameField {
     @Id
     private int id;
+
     public PlayerGameField() {
     }
 
+
+    @Getter
     @OneToOne
-    @Getter
     private final ShipContainer shipContainer = new ShipContainer();
+
     @Getter
+    @OneToOne
     private PlayerFieldState playerFieldState = PlayerFieldState.INIT_STAGE;
 
     /**
      * set true if its hit false if its alive
      */
-    @OneToOne
-    private FieldPointBoolean shipHitCells;
-
     @OneToMany
+    private ArrayList<FieldPointBoolean> shipHitCells = new ArrayList<>();
+
     @Getter
+    @OneToMany
     private final ArrayList<GameFieldPoint> enemyMissShots = new ArrayList<>();
 
     /**
@@ -44,15 +46,21 @@ public class PlayerGameField {
      */
     //TODO механика повторного удара по уже отмеченной клетке
     public ShotResult enemyHit(GameFieldPoint target) throws IllegalStateException {
-        if (playerFieldState == PlayerFieldState.READY_FOR_GAME)
-            if (shipHitCells.containsKey(target)) {
-                shipHitCells.replace(target, true);
-                if (checkItsLose()) return ShotResult.HIT_AND_LOSE;
-                else return ShotResult.HIT;
-            } else {
+        if (playerFieldState == PlayerFieldState.READY_FOR_GAME) {
+            AtomicBoolean res = new AtomicBoolean(false);
+            shipHitCells.forEach( it -> {
+                if (it.gameFieldPoint.equals(target)) {
+                    res.set(true);
+                    it.bool = true;
+                }
+            });
+            if (!res.get()){
                 enemyMissShots.add(target);
                 return ShotResult.MISS;
             }
+            if (checkItsLose()) return ShotResult.HIT_AND_LOSE;
+            else return ShotResult.HIT;
+        }
         else throw new IllegalStateException("Player game field is not accomplished");
     }
 
@@ -62,16 +70,16 @@ public class PlayerGameField {
 
     public ArrayList<GameFieldPoint> getEnemyHitShots() {
         ArrayList<GameFieldPoint> res = new ArrayList<>();
-        shipHitCells.forEach((gameFieldPoint, aBoolean) -> {
-            if (aBoolean) res.add(gameFieldPoint);
+        shipHitCells.forEach( it -> {
+            if (it.bool) res.add(it.gameFieldPoint);
         });
         return res;
     }
 
     private boolean checkItsLose() {
         AtomicBoolean res = new AtomicBoolean(true);
-        shipHitCells.values().forEach(it -> {
-            if (!it) {
+        shipHitCells.forEach(it -> {
+            if (!it.bool) {
                 res.set(false);
             }
         });
@@ -85,12 +93,24 @@ public class PlayerGameField {
      * @throws NullPointerException  - if you trying start game twice or more
      */
     public void startGame() throws IllegalStateException, NullPointerException {
-        if (shipContainer.isComplete()){
-            shipContainer.getShipsCells().forEach(it -> shipHitCells.put(it, false));
+        if (shipContainer.isComplete()) {
+            shipContainer.getShipsCells().forEach(it -> shipHitCells.add(new FieldPointBoolean(it,false)));
             playerFieldState = PlayerFieldState.READY_FOR_GAME;
         } else {
             throw new IllegalStateException("Not all ships were defined");
         }
+    }
+
+    public ArrayList<GameFieldPoint> getEnemyMissShots() {
+        return enemyMissShots;
+    }
+
+    public ShipContainer getShipContainer() {
+        return shipContainer;
+    }
+
+    public PlayerFieldState getPlayerFieldState() {
+        return playerFieldState;
     }
 
 //    /**

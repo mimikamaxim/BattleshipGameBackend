@@ -17,11 +17,13 @@ public class Player implements IUser {
     private int id;
 
     @NotNull
+    @Getter
     @Size(min = 2, max = 50)
     @Column(name = "username")
     private String username;
 
     @NotNull
+    @Getter
     @Column(name = "password")
     private String password;
 
@@ -29,7 +31,11 @@ public class Player implements IUser {
     @JoinColumn(name = "player_id", referencedColumnName = "id")
     private Game game;
 
-    //поле кароблей
+    public String getPassword() {
+        return password;
+    }
 
-    //поле выстрелов
+    public String getUsername() {
+        return username;
+    }
 }
